@@ -1,4 +1,4 @@
-package dragontoothmg
+package dragon
 
 import (
 	"fmt"
@@ -180,7 +180,7 @@ func TestUnderDirectAttack(t *testing.T) {
 
 	b2 := ParseFen("r1N1kbnN/3pp3/1p2q3/2rR1bpP/2QP1nBR/6B1/1PP1P1P1/RNK4R b - g6 0 0")
 	solutionsByWhite := map[uint8]bool{
-		algebraicToIndexFatal("c2"): true, // TODO(dylhunn): this case is dubious
+		algebraicToIndexFatal("c2"): true, // TODO(noahklein): this case is dubious
 		algebraicToIndexFatal("b3"): true,
 		algebraicToIndexFatal("b5"): true,
 		algebraicToIndexFatal("b6"): true,

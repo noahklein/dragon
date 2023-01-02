@@ -1,4 +1,4 @@
-package dragontoothmg
+package dragon
 
 // Each bitboard shall use little-endian rank-file mapping:
 // 56  57  58  59  60  61  62  63

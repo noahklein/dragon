@@ -1,4 +1,4 @@
-package dragontoothmg
+package dragon
 
 // Applies a move to the board, and returns a function that can be used to unapply it.
 // This function assumes that the given move is valid (i.e., is in the set of moves found by GenerateLegalMoves()).
@@ -38,7 +38,7 @@ func (b *Board) Apply(m Move) func() {
 
 	// If it is any kind of capture or pawn move, reset halfmove clock.
 	resetHalfmoveClockFrom := -1
-	if IsCapture(m, b) || pieceType == Pawn { 
+	if IsCapture(m, b) || pieceType == Pawn {
 		resetHalfmoveClockFrom = int(b.Halfmoveclock)
 		b.Halfmoveclock = 0 // reset halfmove clock
 	} else {
@@ -47,7 +47,7 @@ func (b *Board) Apply(m Move) func() {
 
 	// King moves strip castling rights
 	if pieceType == King {
-		// TODO(dylhunn): do this without a branch
+		// TODO(noahklein): do this without a branch
 		if m.To()-m.From() == 2 { // castle short
 			castleStatus = 1
 			oldRookLoc = m.To() + 1

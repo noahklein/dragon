@@ -1,4 +1,4 @@
-package dragontoothmg
+package dragon
 
 import (
 	"errors"
@@ -103,7 +103,7 @@ func (b *Bitboards) sanityCheck() {
 
 // Some example valid move strings:
 // e1e2 b4d6 e7e8q a2a1n
-// TODO(dylhunn): Make the parser more forgiving. Eg: 0-0, O-O-O, a2-a3, D3D4
+// TODO(noahklein): Make the parser more forgiving. Eg: 0-0, O-O-O, a2-a3, D3D4
 func ParseMove(movestr string) (Move, error) {
 	if movestr == "0000" {
 		return 0, nil
@@ -283,7 +283,7 @@ func (b *Board) ToFen() string {
 
 // Parse a board from a FEN string.
 func ParseFen(fen string) Board {
-	// BUG(dylhunn): This FEN parsing implementation doesn't handle malformed inputs.
+	// BUG(noahklein): This FEN parsing implementation doesn't handle malformed inputs.
 	tokens := strings.Fields(fen)
 	var b Board
 	// replace digits with the appropriate number of dashes
@@ -353,7 +353,7 @@ func ParseFen(fen string) Board {
 		res, err := AlgebraicToIndex(tokens[3])
 		if err != nil {
 			var b2 Board
-			return b2 // TODO(dylhunn): return error instead of blank board
+			return b2 // TODO(noahklein): return error instead of blank board
 		}
 		b.enpassant = res
 	}

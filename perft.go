@@ -1,4 +1,4 @@
-package dragontoothmg
+package dragon
 
 import "fmt"
 

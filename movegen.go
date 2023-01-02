@@ -1,5 +1,5 @@
-// dragontoothmg is a fast chess legal move generator library based on magic bitboards.
-package dragontoothmg
+// dragon is a fast chess legal move generator library based on magic bitboards.
+package dragon
 
 // The main Dragontooth move generator file.
 // Functions are in this file if (and only if) they are performance-critical
@@ -318,7 +318,7 @@ func (b *Board) pawnCaptureBitboards(nonpinned uint64) (east uint64, west uint64
 	notHFile := uint64(0x7F7F7F7F7F7F7F7F)
 	notAFile := uint64(0xFEFEFEFEFEFEFEFE)
 	var targets uint64
-	// TODO(dylhunn): Always try the en passant capture and verify check status, regardless of
+	// TODO(noahklein): Always try the en passant capture and verify check status, regardless of
 	// valid square requirements
 	if b.enpassant > 0 { // an en-passant target is active
 		targets = (1 << b.enpassant)
@@ -361,7 +361,7 @@ func (b *Board) kingPushes(moveList *[]Move, ptrToOurBitboards *Bitboards) {
 	ourKingLocation := uint8(bits.TrailingZeros64(ptrToOurBitboards.Kings))
 	noFriendlyPieces := ^(ptrToOurBitboards.All)
 
-	// TODO(dylhunn): Modifying the board is NOT thread-safe.
+	// TODO(noahklein): Modifying the board is NOT thread-safe.
 	// We only do this to avoid the king danger problem, aka moving away from a
 	// checking slider.
 	oldKings := ptrToOurBitboards.Kings
@@ -594,7 +594,7 @@ func (b *Board) countAttacks(byBlack bool, origin uint8, abortEarly int) (int, u
 		blockerDestinations |= attackRay
 	}
 	// find attacking kings
-	// TODO(dylhunn): What if the opponent king can't actually move to the origin square?
+	// TODO(noahklein): What if the opponent king can't actually move to the origin square?
 	king_attackers := kingMasks[origin] & opponentPieces.Kings
 	numAttacks += bits.OnesCount64(king_attackers)
 	blockerDestinations |= king_attackers
