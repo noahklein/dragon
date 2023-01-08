@@ -263,3 +263,13 @@ func determinePieceType(ourBitboardPtr *Bitboards, squareMask uint64) (Piece, *u
 	}
 	return pieceType, pieceTypeBitboard
 }
+
+// TODO: still missing something, seems to cause problems.
+func (b *Board) NullMove() func() {
+	b.Wtomove = !b.Wtomove
+	b.hash ^= whiteToMoveZobristC
+	return func() {
+		b.Wtomove = !b.Wtomove
+		b.hash ^= whiteToMoveZobristC
+	}
+}

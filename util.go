@@ -52,38 +52,36 @@ func IsCapture(m Move, b *Board) bool {
 
 func GetPieceType(square uint8, b *Board) (int, bool) {
 	squareMask := uint64(1) << square
-	var isWhite bool = true
 	if b.White.All&squareMask != 0 {
 		if b.White.Pawns&squareMask != 0 {
-			return Pawn, isWhite
+			return Pawn, true
 		} else if b.White.Knights&squareMask != 0 {
-			return Knight, isWhite
+			return Knight, true
 		} else if b.White.Bishops&squareMask != 0 {
-			return Bishop, isWhite
+			return Bishop, true
 		} else if b.White.Rooks&squareMask != 0 {
-			return Rook, isWhite
+			return Rook, true
 		} else if b.White.Queens&squareMask != 0 {
-			return Queen, isWhite
+			return Queen, true
 		} else if b.White.Kings&squareMask != 0 {
-			return King, isWhite
+			return King, true
 		}
 	} else {
-		isWhite = false
 		if b.Black.Pawns&squareMask != 0 {
-			return Pawn, isWhite
+			return Pawn, false
 		} else if b.Black.Knights&squareMask != 0 {
-			return Knight, isWhite
+			return Knight, false
 		} else if b.Black.Bishops&squareMask != 0 {
-			return Bishop, isWhite
+			return Bishop, false
 		} else if b.Black.Rooks&squareMask != 0 {
-			return Rook, isWhite
+			return Rook, false
 		} else if b.Black.Queens&squareMask != 0 {
-			return Queen, isWhite
+			return Queen, false
 		} else if b.Black.Kings&squareMask != 0 {
-			return King, isWhite
+			return King, false
 		}
 	}
-	return Nothing, isWhite
+	return Nothing, false
 }
 
 // A testing-use function that ignores the error output

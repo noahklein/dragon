@@ -12,7 +12,7 @@ import (
 )
 
 // The main API entrypoint. Generates all legal moves for a given board.
-func (b *Board) GenerateLegalMoves() []Move {
+func (b *Board) GenerateLegalMoves() ([]Move, bool) {
 	moves := make([]Move, 0, kDefaultMoveListLength)
 	// First, see if we are currently in check. If we are, invoke a special check-
 	// evasion move generator.
@@ -28,7 +28,7 @@ func (b *Board) GenerateLegalMoves() []Move {
 	kingAttackers, blockerDestinations := b.countAttacks(b.Wtomove, kingLocation, 2)
 	if kingAttackers >= 2 { // Under multiple attack, we must move the king.
 		b.kingPushes(&moves, ourPiecesPtr)
-		return moves
+		return moves, true
 	}
 
 	// Several move types can work in single check, but we must block the check
@@ -37,14 +37,14 @@ func (b *Board) GenerateLegalMoves() []Move {
 		pinnedPieces := b.generatePinnedMoves(&moves, blockerDestinations)
 		nonpinnedPieces := ^pinnedPieces
 		// TODO
-		b.pawnPushes(&moves, nonpinnedPieces, blockerDestinations)
 		b.pawnCaptures(&moves, nonpinnedPieces, blockerDestinations)
+		b.pawnPushes(&moves, nonpinnedPieces, blockerDestinations)
 		b.knightMoves(&moves, nonpinnedPieces, blockerDestinations)
 		b.rookMoves(&moves, nonpinnedPieces, blockerDestinations)
 		b.bishopMoves(&moves, nonpinnedPieces, blockerDestinations)
 		b.queenMoves(&moves, nonpinnedPieces, blockerDestinations)
 		b.kingPushes(&moves, ourPiecesPtr)
-		return moves
+		return moves, true
 	}
 
 	// Then, calculate all the absolutely pinned pieces, and compute their moves.
@@ -60,7 +60,7 @@ func (b *Board) GenerateLegalMoves() []Move {
 	b.bishopMoves(&moves, nonpinnedPieces, everything)
 	b.queenMoves(&moves, nonpinnedPieces, everything)
 	b.kingMoves(&moves)
-	return moves
+	return moves, true
 }
 
 // Calculate the available moves for absolutely pinned pieces (pinned to the king).

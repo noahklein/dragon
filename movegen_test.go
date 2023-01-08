@@ -213,7 +213,7 @@ func TestBreakCheck(t *testing.T) {
 	}
 	for k, v := range positions {
 		b := ParseFen(k)
-		moves := b.GenerateLegalMoves()
+		moves, _ := b.GenerateLegalMoves()
 		if len(moves) != v {
 			t.Error("Legal moves breaking check: wrong length. Expected", v, "but got", len(moves), "for position", b.ToFen())
 		}
@@ -318,7 +318,7 @@ func TestTrickyCornerCases(t *testing.T) {
 	for k, v := range positions {
 		b := ParseFen(k)
 		fenbefore := b.ToFen()
-		moves := b.GenerateLegalMoves()
+		moves, _ := b.GenerateLegalMoves()
 		fenafter := b.ToFen()
 		if fenbefore != fenafter {
 			t.Error("En passant case corrupted board state.")
@@ -387,7 +387,7 @@ func TestCountAttacks(t *testing.T) {
 
 func testBugCases(t *testing.T) {
 	b := ParseFen("r3k2r/p1ppqpb1/bn2pnp1/3PN3/4P3/1pN2Q1p/PPPBBPPP/R4RK1 w kq - 0 2")
-	moves := b.GenerateLegalMoves()
+	moves, _ := b.GenerateLegalMoves()
 	for i, v := range moves {
 		fmt.Println(i, &v)
 	}
@@ -531,7 +531,7 @@ func TestLegalMoves(t *testing.T) {
 	for k, v := range positions {
 		b := ParseFen(k)
 		fenbefore := b.ToFen()
-		moves := b.GenerateLegalMoves()
+		moves, _ := b.GenerateLegalMoves()
 		fenafter := b.ToFen()
 		if fenbefore != fenafter {
 			t.Error("Move generation corrupted board state. Before:\n", fenbefore, "\nAfter:\n", fenafter)
