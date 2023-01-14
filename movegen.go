@@ -77,15 +77,15 @@ func (b *Board) generatePinnedMoves(moveList *[]Move, allowDest uint64) uint64 {
 		ourPieces = &(b.White)
 		oppPieces = &(b.Black)
 		pawnPushDirection = 1
-		doublePushRank = onlyRank[3]
-		ourPromotionRank = onlyRank[7]
+		doublePushRank = RankMasks[3]
+		ourPromotionRank = RankMasks[7]
 	} else {
 		ourKingIdx = uint8(bits.TrailingZeros64(b.Black.Kings))
 		ourPieces = &(b.Black)
 		oppPieces = &(b.White)
 		pawnPushDirection = -1
-		doublePushRank = onlyRank[4]
-		ourPromotionRank = onlyRank[0]
+		doublePushRank = RankMasks[4]
+		ourPromotionRank = RankMasks[0]
 	}
 	allPieces := oppPieces.All | ourPieces.All
 
@@ -235,11 +235,11 @@ func (b *Board) pawnPushBitboards(nonpinned uint64) (targets uint64, doubleTarge
 	if b.Wtomove {
 		movableWhitePawns := b.White.Pawns & nonpinned
 		targets = movableWhitePawns << 8 & free
-		doubleTargets = targets << 8 & onlyRank[3] & free
+		doubleTargets = targets << 8 & RankMasks[3] & free
 	} else {
 		movableBlackPawns := b.Black.Pawns & nonpinned
 		targets = movableBlackPawns >> 8 & free
-		doubleTargets = targets >> 8 & onlyRank[4] & free
+		doubleTargets = targets >> 8 & RankMasks[4] & free
 	}
 	return
 }
@@ -604,14 +604,14 @@ func (b *Board) countAttacks(byBlack bool, origin uint8, abortEarly int) (int, u
 	// find attacking pawns
 	var pawn_attackers_mask uint64 = 0
 	if byBlack {
-		pawn_attackers_mask = (1 << (origin + 7)) & ^(onlyFile[7])
-		pawn_attackers_mask |= (1 << (origin + 9)) & ^(onlyFile[0])
+		pawn_attackers_mask = (1 << (origin + 7)) & ^(FileMasks[7])
+		pawn_attackers_mask |= (1 << (origin + 9)) & ^(FileMasks[0])
 	} else {
 		if origin-7 >= 0 {
-			pawn_attackers_mask = (1 << (origin - 7)) & ^(onlyFile[0])
+			pawn_attackers_mask = (1 << (origin - 7)) & ^(FileMasks[0])
 		}
 		if origin-9 >= 0 {
-			pawn_attackers_mask |= (1 << (origin - 9)) & ^(onlyFile[7])
+			pawn_attackers_mask |= (1 << (origin - 9)) & ^(FileMasks[7])
 		}
 	}
 	pawn_attackers_mask &= opponentPieces.Pawns

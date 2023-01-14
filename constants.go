@@ -184,13 +184,18 @@ const kDefaultMoveListLength int = 65
 var everything uint64 = ^(uint64(0))
 
 // Only activate one file, A-H (A=0, H=7)
-var onlyFile = [8]uint64{
+var FileMasks = [8]uint64{
 	0x0101010101010101, 0x0202020202020202, 0x0404040404040404, 0x0808080808080808,
 	0x1010101010101010, 0x2020202020202020, 0x4040404040404040, 0x8080808080808080}
 
-var onlyRank = [8]uint64{
+var RankMasks = [8]uint64{
 	0xFF, 0xFF00, 0xFF0000, 0xFF000000,
 	0xFF00000000, 0xFF0000000000, 0xFF000000000000, 0xFF00000000000000}
+
+// File converts a square index to the file it's on, A-H (A=0, H=7)
+func File(sq uint8) uint8 {
+	return sq & 7
+}
 
 // Masks for attacks
 // In order: knight on A1, B1, C1, ... F8, G8, H8

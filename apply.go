@@ -15,16 +15,16 @@ func (b *Board) Apply(m Move) func() {
 		ourBitboardPtr = &(b.White)
 		oppBitboardPtr = &(b.Black)
 		epDelta = -8
-		oppStartingRankBb = onlyRank[7]
-		ourStartingRankBb = onlyRank[0]
+		oppStartingRankBb = RankMasks[7]
+		ourStartingRankBb = RankMasks[0]
 		ourPiecesPawnZobristIndex = 0
 		oppPiecesPawnZobristIndex = 6
 	} else {
 		ourBitboardPtr = &(b.Black)
 		oppBitboardPtr = &(b.White)
 		epDelta = 8
-		oppStartingRankBb = onlyRank[0]
-		ourStartingRankBb = onlyRank[7]
+		oppStartingRankBb = RankMasks[0]
+		ourStartingRankBb = RankMasks[7]
 		b.Fullmoveno++ // increment after black's move
 		ourPiecesPawnZobristIndex = 6
 		oppPiecesPawnZobristIndex = 0
@@ -70,11 +70,11 @@ func (b *Board) Apply(m Move) func() {
 
 	// Rook moves strip castling rights
 	if pieceType == Rook {
-		if b.canCastleKingside() && (fromBitboard&onlyFile[7] != 0) &&
+		if b.canCastleKingside() && (fromBitboard&FileMasks[7] != 0) &&
 			fromBitboard&ourStartingRankBb != 0 { // king's rook
 			flippedKsCastle = true
 			b.flipKingsideCastle()
-		} else if b.canCastleQueenside() && (fromBitboard&onlyFile[0] != 0) &&
+		} else if b.canCastleQueenside() && (fromBitboard&FileMasks[0] != 0) &&
 			fromBitboard&ourStartingRankBb != 0 { // queen's rook
 			flippedQsCastle = true
 			b.flipQueensideCastle()
@@ -267,9 +267,19 @@ func determinePieceType(ourBitboardPtr *Bitboards, squareMask uint64) (Piece, *u
 // TODO: still missing something, seems to cause problems.
 func (b *Board) NullMove() func() {
 	b.Wtomove = !b.Wtomove
+	oldEpCaptureSquare := b.enpassant
+	b.enpassant = 0
+
 	b.hash ^= whiteToMoveZobristC
+	b.hash ^= uint64(oldEpCaptureSquare)
+	b.hash ^= uint64(b.enpassant)
+
 	return func() {
-		b.Wtomove = !b.Wtomove
+		b.hash ^= uint64(b.enpassant)
+		b.hash ^= uint64(oldEpCaptureSquare)
 		b.hash ^= whiteToMoveZobristC
+
+		b.enpassant = oldEpCaptureSquare
+		b.Wtomove = !b.Wtomove
 	}
 }

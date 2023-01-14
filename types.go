@@ -199,10 +199,10 @@ type Piece uint8
 
 const (
 	Nothing = iota
-	Pawn    = iota
-	Knight  = iota // list before bishop for promotion loops
-	Bishop  = iota
-	Rook    = iota
-	Queen   = iota
-	King    = iota
+	Pawn
+	Knight // list before bishop for promotion loops
+	Bishop
+	Rook
+	Queen
+	King
 )
