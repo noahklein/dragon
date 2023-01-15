@@ -7,11 +7,11 @@ import (
 
 // Initialize the magic lookups tables
 func init() {
-	magicMovesRook = make([][]uint64, 64, 64)
-	magicMovesBishop = make([][]uint64, 64, 64)
+	magicMovesRook = make([][]uint64, 64)
+	magicMovesBishop = make([][]uint64, 64)
 	for i := 0; i < 64; i++ {
-		magicMovesRook[i] = make([]uint64, magicDbSizeRook[i], magicDbSizeRook[i])
-		magicMovesBishop[i] = make([]uint64, magicDbSizeBishop[i], magicDbSizeBishop[i])
+		magicMovesRook[i] = make([]uint64, magicDbSizeRook[i])
+		magicMovesBishop[i] = make([]uint64, magicDbSizeBishop[i])
 	}
 	generateRookMagicTable()
 	generateBishopMagicTable()

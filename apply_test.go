@@ -138,3 +138,18 @@ func TestApplyUnapply(t *testing.T) {
 		}*/
 	}
 }
+
+func TestNullMoveHash(t *testing.T) {
+	b := ParseFen(Startpos)
+
+	hash := b.Hash()
+	unmove := b.NullMove()
+	if b.Hash() == hash {
+		t.Errorf("Hash didn't change after null move")
+	}
+
+	unmove()
+	if b.Hash() != hash {
+		t.Errorf("Bad hash after unmove")
+	}
+}

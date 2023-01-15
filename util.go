@@ -108,12 +108,12 @@ func ParseMove(movestr string) (Move, error) {
 	}
 	var mv Move
 	if len(movestr) < 4 || len(movestr) > 5 {
-		return mv, errors.New("Invalid move to parse.")
+		return mv, errors.New("invalid move to parse")
 	}
 	from, errf := AlgebraicToIndex(movestr[0:2])
 	to, errto := AlgebraicToIndex(movestr[2:4])
 	if errf != nil || errto != nil {
-		return mv, errors.New("Invalid move to parse.")
+		return mv, errors.New("invalid move to parse")
 	}
 	mv.Setto(Square(to)).Setfrom(Square(from))
 	if len(movestr) == 5 {
@@ -127,7 +127,7 @@ func ParseMove(movestr string) (Move, error) {
 		case 'r':
 			mv.Setpromote(Rook)
 		default:
-			return mv, errors.New("Invalid promotion symbol in move.")
+			return mv, errors.New("invalid promotion symbol in move")
 		}
 	}
 	return mv, nil
