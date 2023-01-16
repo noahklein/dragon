@@ -99,6 +99,78 @@ func (b *Bitboards) sanityCheck() {
 	}
 }
 
+type pieceColor struct {
+	piece int
+	side  bool
+}
+
+func pieceFromRune(r rune) pieceColor {
+	switch r {
+	// White
+	case 'P':
+		return pieceColor{Pawn, true}
+	case 'N':
+		return pieceColor{Knight, true}
+	case 'B':
+		return pieceColor{Bishop, true}
+	case 'R':
+		return pieceColor{Rook, true}
+	case 'Q':
+		return pieceColor{Queen, true}
+	case 'K':
+		return pieceColor{King, true}
+	// Black
+	case 'p':
+		return pieceColor{Pawn, false}
+	case 'n':
+		return pieceColor{Knight, false}
+	case 'b':
+		return pieceColor{Bishop, false}
+	case 'r':
+		return pieceColor{Rook, false}
+	case 'q':
+		return pieceColor{Queen, false}
+	case 'k':
+		return pieceColor{King, false}
+	}
+	return pieceColor{Nothing, false}
+}
+
+var pieceStrings = [2][7]string{
+	{".", "♙", "♘", "♗", "♖", "♕", "♔"},
+	{".", "♟", "♞", "♝", "♜", "♛", "♚"},
+}
+
+func (b *Board) String() string {
+	var s strings.Builder
+	s.WriteByte('\n')
+
+	for rank := 7; rank >= 0; rank-- {
+		s.WriteString(fmt.Sprintf(" %v  ", rank+1))
+		for file := 0; file <= 7; file++ {
+			sq := uint8(8*rank + file)
+			piece, isWhite := GetPieceType(sq, b)
+			if piece < Pawn {
+				s.WriteString(" . ")
+				continue
+			}
+
+			color := 0
+			if !isWhite {
+				color = 1
+			}
+
+			char := pieceStrings[color][piece]
+			s.WriteString(" " + char + " ")
+		}
+		s.WriteByte('\n')
+	}
+
+	s.WriteByte('\n')
+	s.WriteString("     A  B  C  D  E  F  G  H")
+	return s.String()
+}
+
 // Some example valid move strings:
 // e1e2 b4d6 e7e8q a2a1n
 // TODO(noahklein): Make the parser more forgiving. Eg: 0-0, O-O-O, a2-a3, D3D4
@@ -194,8 +266,7 @@ func (b *Board) ToFen() string {
 	for i := 63; i >= 0; i-- {
 		// Loop file A to H, within ranks 8 to 1
 		currIdx := (i/8)*8 + (7 - (i % 8))
-		var currMask uint64
-		currMask = 1 << uint64(currIdx)
+		currMask := uint64(1) << currIdx
 
 		toprint := ""
 		if b.White.Pawns&currMask != 0 {

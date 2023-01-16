@@ -8,7 +8,7 @@ import (
 // TESTS
 // -----
 
-func testDivide(t *testing.T) {
+func TestDivide(t *testing.T) {
 	b := ParseFen("nqn5/P1Pk4/8/8/8/6K1/7p/5N2 w - - 0 1")
 	Divide(&b, 1)
 }
