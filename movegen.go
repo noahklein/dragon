@@ -60,7 +60,7 @@ func (b *Board) GenerateLegalMoves() ([]Move, bool) {
 	b.bishopMoves(&moves, nonpinnedPieces, everything)
 	b.queenMoves(&moves, nonpinnedPieces, everything)
 	b.kingMoves(&moves)
-	return moves, true
+	return moves, false
 }
 
 // Calculate the available moves for absolutely pinned pieces (pinned to the king).
